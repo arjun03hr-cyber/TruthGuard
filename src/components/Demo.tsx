@@ -198,36 +198,88 @@ const Demo = () => {
               )}
             </Button>
 
-            {/* Result */}
-            {result && (
-              <motion.div
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.4 }}
-                className={`mt-8 p-6 rounded-xl ${verdictStyles.bg} border ${verdictStyles.border}`}
-              >
-                <div className="flex items-center gap-4 mb-6">
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${verdictStyles.bg}`}>
-                    {verdictStyles.icon && (
-                      <verdictStyles.icon className={`h-7 w-7 ${verdictStyles.color}`} />
-                    )}
-                  </div>
-                  <div>
-                    <div className={`text-xl font-bold ${verdictStyles.color}`}>
-                      {verdictStyles.label}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      Confidence: {result.confidence}%
-                    </div>
-                  </div>
-                </div>
+            {/* Results */}
+{result && (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.4 }}
+    className={`mt-8 rounded-xl ${verdictStyles.bg} border ${verdictStyles.border} flex flex-col`}
+  >
 
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {result.explanation}
-                </p>
-              </motion.div>
-            )}
-          </div>
+                <div className="p-6 flex flex-col h-full">
+  {/* Verdict Header */}
+  <div className="flex items-center gap-4 mb-4">
+    <div
+      className={`w-12 h-12 rounded-xl ${verdictStyles.bg} flex items-center justify-center`}
+    >
+      {verdictStyles.icon && (
+        <verdictStyles.icon
+          className={`h-6 w-6 ${verdictStyles.color}`}
+        />
+      )}
+    </div>
+
+    <div>
+      <div className={`text-xl font-display font-bold ${verdictStyles.color}`}>
+        {verdictStyles.label}
+      </div>
+      <div className="text-sm text-muted-foreground">
+        Confidence: {result.confidence}%
+      </div>
+    </div>
+  </div>
+
+  {/* Confidence Bar */}
+  <div className="mb-6">
+    <div className="h-2 bg-secondary/60 rounded-full overflow-hidden">
+      <motion.div
+        initial={{ width: 0 }}
+        animate={{ width: `${result.confidence}%` }}
+        transition={{ duration: 0.8 }}
+        className={`h-full ${
+          result.verdict === "real" ? "bg-success" : "bg-destructive"
+        }`}
+      />
+    </div>
+  </div>
+
+  {/* Analysis */}
+  <div className="mb-6">
+    <div className="flex items-center gap-2 mb-2">
+      <Info className="h-4 w-4 text-muted-foreground" />
+      <span className="text-sm font-medium">Analysis</span>
+    </div>
+
+    <p className="text-sm text-muted-foreground leading-relaxed">
+      {result.explanation}
+    </p>
+  </div>
+
+  {/* Push red flags to bottom */}
+  {result.redFlags.length > 0 && (
+    <div className="mt-auto pt-4 border-t border-border/40">
+      <div className="flex items-center gap-2 mb-3">
+        <AlertTriangle className="h-4 w-4 text-warning" />
+        <span className="text-sm font-medium">
+          Red Flags Detected
+        </span>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {result.redFlags.map((flag, index) => (
+          <span
+            key={index}
+            className="text-xs px-3 py-1.5 bg-warning/10 text-warning rounded-full border border-warning/30"
+          >
+            {flag}
+          </span>
+        ))}
+      </div>
+    </div>
+  )}
+</div>
+
         </ScrollReveal>
 
         {/* Disclaimer */}
