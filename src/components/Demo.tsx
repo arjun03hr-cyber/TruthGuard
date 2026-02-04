@@ -26,10 +26,8 @@ const Demo = () => {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const { toast } = useToast();
 
-  // ✅ NEW (kept): textarea focus support
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  // ✅ NEW (kept): focus when arriving via #demo
   useEffect(() => {
     if (window.location.hash === "#demo") {
       setTimeout(() => {
@@ -119,11 +117,9 @@ const Demo = () => {
 
   return (
     <section id="demo" className="section-padding relative">
-      {/* Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-radial-glow opacity-30" />
 
       <div className="container-narrow relative z-10">
-        {/* Header */}
         <ScrollReveal className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
             <Search className="h-4 w-4 text-primary" />
@@ -142,10 +138,8 @@ const Demo = () => {
           </p>
         </ScrollReveal>
 
-        {/* Demo Card */}
         <ScrollReveal delay={0.15}>
           <div className="glass-card p-6 md:p-8 glow-effect">
-            {/* Input */}
             <div className="mb-6">
               <label className="block text-sm font-medium mb-3">
                 Enter news text or URL
@@ -159,7 +153,6 @@ const Demo = () => {
               />
             </div>
 
-            {/* Samples */}
             <div className="mb-6">
               <p className="text-xs text-muted-foreground mb-2">
                 Try a sample:
@@ -177,7 +170,6 @@ const Demo = () => {
               </div>
             </div>
 
-            {/* Button */}
             <Button
               onClick={handleAnalyze}
               disabled={!inputText.trim() || isAnalyzing}
@@ -198,91 +190,90 @@ const Demo = () => {
               )}
             </Button>
 
-            {/* Results */}
-{result && (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.4 }}
-    className={`mt-8 rounded-xl ${verdictStyles.bg} border ${verdictStyles.border} flex flex-col`}
-  >
-
+            {result && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className={`mt-8 rounded-xl ${verdictStyles.bg} border ${verdictStyles.border} flex flex-col`}
+              >
                 <div className="p-6 flex flex-col h-full">
-  {/* Verdict Header */}
-  <div className="flex items-center gap-4 mb-4">
-    <div
-      className={`w-12 h-12 rounded-xl ${verdictStyles.bg} flex items-center justify-center`}
-    >
-      {verdictStyles.icon && (
-        <verdictStyles.icon
-          className={`h-6 w-6 ${verdictStyles.color}`}
-        />
-      )}
-    </div>
+                  <div className="flex items-center gap-4 mb-4">
+                    <div
+                      className={`w-12 h-12 rounded-xl ${verdictStyles.bg} flex items-center justify-center`}
+                    >
+                      {verdictStyles.icon && (
+                        <verdictStyles.icon
+                          className={`h-6 w-6 ${verdictStyles.color}`}
+                        />
+                      )}
+                    </div>
 
-    <div>
-      <div className={`text-xl font-display font-bold ${verdictStyles.color}`}>
-        {verdictStyles.label}
-      </div>
-      <div className="text-sm text-muted-foreground">
-        Confidence: {result.confidence}%
-      </div>
-    </div>
-  </div>
+                    <div>
+                      <div
+                        className={`text-xl font-display font-bold ${verdictStyles.color}`}
+                      >
+                        {verdictStyles.label}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Confidence: {result.confidence}%
+                      </div>
+                    </div>
+                  </div>
 
-  {/* Confidence Bar */}
-  <div className="mb-6">
-    <div className="h-2 bg-secondary/60 rounded-full overflow-hidden">
-      <motion.div
-        initial={{ width: 0 }}
-        animate={{ width: `${result.confidence}%` }}
-        transition={{ duration: 0.8 }}
-        className={`h-full ${
-          result.verdict === "real" ? "bg-success" : "bg-destructive"
-        }`}
-      />
-    </div>
-  </div>
+                  <div className="mb-6">
+                    <div className="h-2 bg-secondary/60 rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${result.confidence}%` }}
+                        transition={{ duration: 0.8 }}
+                        className={`h-full ${
+                          result.verdict === "real"
+                            ? "bg-success"
+                            : "bg-destructive"
+                        }`}
+                      />
+                    </div>
+                  </div>
 
-  {/* Analysis */}
-  <div className="mb-6">
-    <div className="flex items-center gap-2 mb-2">
-      <Info className="h-4 w-4 text-muted-foreground" />
-      <span className="text-sm font-medium">Analysis</span>
-    </div>
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Info className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm font-medium">Analysis</span>
+                    </div>
 
-    <p className="text-sm text-muted-foreground leading-relaxed">
-      {result.explanation}
-    </p>
-  </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {result.explanation}
+                    </p>
+                  </div>
 
-  {/* Push red flags to bottom */}
-  {result.redFlags.length > 0 && (
-    <div className="mt-auto pt-4 border-t border-border/40">
-      <div className="flex items-center gap-2 mb-3">
-        <AlertTriangle className="h-4 w-4 text-warning" />
-        <span className="text-sm font-medium">
-          Red Flags Detected
-        </span>
-      </div>
+                  {result.redFlags.length > 0 && (
+                    <div className="mt-auto pt-4 border-t border-border/40">
+                      <div className="flex items-center gap-2 mb-3">
+                        <AlertTriangle className="h-4 w-4 text-warning" />
+                        <span className="text-sm font-medium">
+                          Red Flags Detected
+                        </span>
+                      </div>
 
-      <div className="flex flex-wrap gap-2">
-        {result.redFlags.map((flag, index) => (
-          <span
-            key={index}
-            className="text-xs px-3 py-1.5 bg-warning/10 text-warning rounded-full border border-warning/30"
-          >
-            {flag}
-          </span>
-        ))}
-      </div>
-    </div>
-  )}
-</div>
-
+                      <div className="flex flex-wrap gap-2">
+                        {result.redFlags.map((flag, index) => (
+                          <span
+                            key={index}
+                            className="text-xs px-3 py-1.5 bg-warning/10 text-warning rounded-full border border-warning/30"
+                          >
+                            {flag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </div>
         </ScrollReveal>
 
-        {/* Disclaimer */}
         <ScrollReveal delay={0.25}>
           <p className="text-center text-xs text-muted-foreground mt-6">
             Powered by AI. Results are for informational purposes only.
