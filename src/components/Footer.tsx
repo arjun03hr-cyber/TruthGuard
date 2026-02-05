@@ -23,7 +23,7 @@ const Footer = () => {
             {/* Social Links */}
             <div className="flex items-center gap-4">
               <a
-                href="https://github.com/arjun03125-art/TruthGuard"
+                href="https://github.com/arjun03hr-cyber/TruthGuard"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-colors"
